@@ -1,0 +1,3716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的书影音 - 记录每一次心动</title>
+<style>
+  /* ========== 主题变量 ========== */
+  :root {
+    --bg-primary: #FFF8F0;
+    --bg-secondary: #FFE8D6;
+    --bg-card: #FFFFFF;
+    --text-primary: #5C4033;
+    --text-secondary: #8B7355;
+    --text-tertiary: #A0896C;
+    --accent-primary: #F4A261;
+    --accent-secondary: #E76F51;
+    --accent-gradient: linear-gradient(135deg, #F4A261 0%, #E76F51 100%);
+    --border-color: #E8D5BC;
+    --bg-tag: #F5E6D3;
+    --shadow: 0 4px 12px rgba(92, 64, 51, 0.08);
+    --shadow-hover: 0 8px 20px rgba(92, 64, 51, 0.12);
+    --star-color: #FFB347;
+    --success: #6B8E23;
+    --danger: #E74C3C;
+    --info: #6B9BD6;
+  }
+
+  [data-theme="cute"] {
+    --bg-primary: #FFF0F5;
+    --bg-secondary: #FFE4EC;
+    --bg-card: #FFFFFF;
+    --text-primary: #8B4557;
+    --text-secondary: #A86B7D;
+    --text-tertiary: #C49AA8;
+    --accent-primary: #FF6B9D;
+    --accent-secondary: #FF85B3;
+    --accent-gradient: linear-gradient(135deg, #FF6B9D 0%, #FFB6C1 100%);
+    --border-color: #FFD6E0;
+    --bg-tag: #FFE4EC;
+    --shadow: 0 4px 12px rgba(255, 107, 157, 0.1);
+    --shadow-hover: 0 8px 20px rgba(255, 107, 157, 0.15);
+    --star-color: #FF6B9D;
+    --success: #98D8AA;
+    --danger: #FF8B8B;
+    --info: #A8D8EA;
+  }
+
+  [data-theme="cool"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-card: #0f3460;
+    --text-primary: #eaeaea;
+    --text-secondary: #a0a0c0;
+    --text-tertiary: #707090;
+    --accent-primary: #00D9FF;
+    --accent-secondary: #9D4EDD;
+    --accent-gradient: linear-gradient(135deg, #00D9FF 0%, #9D4EDD 100%);
+    --border-color: #2a2a4a;
+    --bg-tag: #1f2937;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 8px 30px rgba(0, 217, 255, 0.2);
+    --star-color: #FFD700;
+    --success: #00FF88;
+    --danger: #FF4757;
+    --info: #00D9FF;
+  }
+
+  [data-theme="dark"] {
+    --bg-primary: #181818;
+    --bg-secondary: #282828;
+    --bg-card: #2D2D2D;
+    --text-primary: #E0E0E0;
+    --text-secondary: #A0A0A0;
+    --text-tertiary: #707070;
+    --accent-primary: #4A9EFF;
+    --accent-secondary: #3A7BD5;
+    --accent-gradient: linear-gradient(135deg, #4A9EFF 0%, #3A7BD5 100%);
+    --border-color: #3D3D3D;
+    --bg-tag: #383838;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --star-color: #FFB347;
+    --success: #4CAF50;
+    --danger: #F44336;
+    --info: #2196F3;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    transition: all 0.3s ease;
+  }
+
+  /* ========== 布局 ========== */
+  .app-container {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* 侧边栏 */
+  .sidebar {
+    width: 260px;
+    background: var(--bg-card);
+    box-shadow: var(--shadow);
+    padding: 24px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 16px;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+
+  .logo-subtitle {
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .nav-menu {
+    list-style: none;
+  }
+
+  .nav-item {
+    margin-bottom: 4px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-link:hover {
+    background: var(--bg-tag);
+    color: var(--text-primary);
+  }
+
+  .nav-link.active {
+    background: var(--bg-tag);
+    color: var(--accent-primary);
+    border-left-color: var(--accent-primary);
+    font-weight: 500;
+  }
+
+  .nav-icon {
+    font-size: 18px;
+  }
+
+  /* 主题切换 */
+  .theme-section {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+  }
+
+  .theme-title {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .theme-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .theme-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .theme-btn.active {
+    border-color: var(--accent-primary);
+  }
+
+  .theme-btn.warm { background: linear-gradient(135deg, #F4A261, #E76F51); }
+  .theme-btn.cute { background: linear-gradient(135deg, #FF6B9D, #FFB6C1); }
+  .theme-btn.cool { background: linear-gradient(135deg, #00D9FF, #9D4EDD); }
+  .theme-btn.dark { background: linear-gradient(135deg, #4A9EFF, #2D2D2D); }
+
+  /* 主内容区 */
+  .main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 32px 40px;
+    transition: all 0.3s ease;
+  }
+
+  .page {
+    display: none;
+  }
+
+  .page.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== 页面头部 ========== */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  .add-btn {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 162, 97, 0.5);
+  }
+
+  /* ========== 筛选栏 ========== */
+  .filter-bar {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .filter-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tag {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .filter-tag:hover {
+    background: var(--border-color);
+  }
+
+  .filter-tag.active {
+    background: var(--accent-gradient);
+    color: white;
+    box-shadow: 0 2px 8px rgba(244, 162, 97, 0.3);
+  }
+
+  .tag-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .tag-filter-label {
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  .tag-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+  }
+
+  .tag-dot:hover {
+    transform: scale(1.15);
+  }
+
+  .tag-dot.active {
+    border-color: var(--text-primary);
+    transform: scale(1.1);
+  }
+
+  .filter-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-input {
+    padding: 10px 14px 10px 36px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    width: 200px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    border-color: var(--accent-primary);
+    width: 260px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+
+  .view-switcher {
+    display: flex;
+    background: var(--bg-tag);
+    border-radius: 10px;
+    padding: 4px;
+  }
+
+  .view-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .view-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .view-btn.active {
+    background: var(--bg-card);
+    color: var(--accent-primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .sort-select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .count-text {
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  /* ========== 卡片视图 ========== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .record-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .record-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .card-cover {
+    width: 100%;
+    height: 180px;
+    background: var(--bg-tag);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-cover .default-icon {
+    font-size: 48px;
+    opacity: 0.5;
+  }
+
+  .type-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+  }
+
+  .type-badge.book { background: linear-gradient(135deg, #6B8E23, #556B2F); }
+  .type-badge.music { background: linear-gradient(135deg, #9370DB, #7B68EE); }
+  .type-badge.movie { background: linear-gradient(135deg, #CD5C5C, #B22222); }
+
+  .status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.9);
+    color: var(--text-secondary);
+  }
+
+  [data-theme="dark"] .status-badge,
+  [data-theme="cool"] .status-badge {
+    background: rgba(0,0,0,0.7);
+    color: #ccc;
+  }
+
+  .card-content {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .star {
+    font-size: 13px;
+    color: var(--border-color);
+  }
+
+  .star.filled {
+    color: var(--star-color);
+  }
+
+  .rating-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .card-tag {
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+  }
+
+  .card-thought {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+    margin-bottom: 12px;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .card-date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  .action-btn:hover {
+    background: var(--border-color);
+    transform: scale(1.1);
+  }
+
+  .action-btn.delete:hover {
+    background: #FFE0E0;
+    color: var(--danger);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--bg-tag);
+    border-radius: 2px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+
+  /* ========== 列表视图 ========== */
+  .list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .list-item {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .list-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .list-cover {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background: var(--bg-tag);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .list-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .list-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .list-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .list-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .list-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .list-tag {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+  }
+
+  .list-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .list-date {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .list-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* ========== 时间线视图 ========== */
+  .timeline-view {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline-view::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -33px;
+    top: 20px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    border: 3px solid var(--bg-primary);
+  }
+
+  .timeline-date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .timeline-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timeline-type {
+    font-size: 18px;
+  }
+
+  .timeline-thought {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .timeline-rating {
+    margin-top: 8px;
+  }
+
+  /* ========== 统计页面 ========== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .stat-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+
+  .stats-section {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* 类型分布 */
+  .type-distribution {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .distribution-chart {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .distribution-center {
+    position: absolute;
+    text-align: center;
+  }
+
+  .distribution-total {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .distribution-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .distribution-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .legend-color.book { background: #6B8E23; }
+  .legend-color.music { background: #9370DB; }
+  .legend-color.movie { background: #CD5C5C; }
+
+  .legend-name {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .legend-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .legend-bar {
+    height: 6px;
+    background: var(--bg-tag);
+    border-radius: 3px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  .legend-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  /* 评分分布 */
+  .rating-distribution {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rating-label {
+    width: 60px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .rating-bar {
+    flex: 1;
+    height: 24px;
+    background: var(--bg-tag);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .rating-bar-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+  }
+
+  .rating-count {
+    width: 40px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  /* 日历热力图 */
+  .heatmap-container {
+    overflow-x: auto;
+  }
+
+  .heatmap {
+    display: flex;
+    gap: 4px;
+    min-width: max-content;
+  }
+
+  .heatmap-month {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .heatmap-week {
+    display: flex;
+    gap: 4px;
+  }
+
+  .heatmap-day {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--bg-tag);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .heatmap-day:hover {
+    transform: scale(1.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .heatmap-day.level-1 { background: rgba(244, 162, 97, 0.3); }
+  .heatmap-day.level-2 { background: rgba(244, 162, 97, 0.5); }
+  .heatmap-day.level-3 { background: rgba(244, 162, 97, 0.7); }
+  .heatmap-day.level-4 { background: rgba(244, 162, 97, 1); }
+
+  [data-theme="cute"] .heatmap-day.level-1 { background: rgba(255, 107, 157, 0.3); }
+  [data-theme="cute"] .heatmap-day.level-2 { background: rgba(255, 107, 157, 0.5); }
+  [data-theme="cute"] .heatmap-day.level-3 { background: rgba(255, 107, 157, 0.7); }
+  [data-theme="cute"] .heatmap-day.level-4 { background: rgba(255, 107, 157, 1); }
+
+  [data-theme="cool"] .heatmap-day.level-1 { background: rgba(0, 217, 255, 0.3); }
+  [data-theme="cool"] .heatmap-day.level-2 { background: rgba(0, 217, 255, 0.5); }
+  [data-theme="cool"] .heatmap-day.level-3 { background: rgba(0, 217, 255, 0.7); }
+  [data-theme="cool"] .heatmap-day.level-4 { background: rgba(0, 217, 255, 1); }
+
+  [data-theme="dark"] .heatmap-day.level-1 { background: rgba(74, 158, 255, 0.3); }
+  [data-theme="dark"] .heatmap-day.level-2 { background: rgba(74, 158, 255, 0.5); }
+  [data-theme="dark"] .heatmap-day.level-3 { background: rgba(74, 158, 255, 0.7); }
+  [data-theme="dark"] .heatmap-day.level-4 { background: rgba(74, 158, 255, 1); }
+
+  .heatmap-tooltip {
+    position: fixed;
+    background: var(--text-primary);
+    color: var(--bg-card);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+  }
+
+  .heatmap-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .heatmap-legend .heatmap-day {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* 月度趋势 */
+  .monthly-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 200px;
+    padding: 20px 0;
+  }
+
+  .monthly-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .monthly-bar-fill {
+    width: 100%;
+    max-width: 40px;
+    background: var(--accent-gradient);
+    border-radius: 6px 6px 0 0;
+    transition: height 0.5s ease;
+    min-height: 4px;
+  }
+
+  .monthly-bar-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  /* 目标页面 */
+  .goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .goal-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .goal-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .goal-type {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .goal-type-icon {
+    font-size: 28px;
+  }
+
+  .goal-type-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .goal-progress {
+    margin-bottom: 12px;
+  }
+
+  .goal-progress-bar {
+    height: 10px;
+    background: var(--bg-tag);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .goal-progress-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+  }
+
+  .goal-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .goal-text .current {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .goal-setting {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .goal-input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+  }
+
+  .goal-input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .goal-save-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-gradient);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* 金句摘录 */
+  .quotes-section {
+    margin-top: 32px;
+  }
+
+  .quotes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .quote-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .quote-mark {
+    font-size: 32px;
+    color: var(--accent-primary);
+    opacity: 0.3;
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    font-family: serif;
+  }
+
+  .quote-text {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    font-style: italic;
+  }
+
+  .quote-source {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    text-align: right;
+  }
+
+  .quote-source .source-name {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* ========== 弹窗 ========== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .modal {
+    background: var(--bg-card);
+    border-radius: 20px;
+    max-width: 560px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 1;
+  }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    background: var(--border-color);
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .form-label .required {
+    color: var(--danger);
+    margin-left: 2px;
+  }
+
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.1);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  /* 类型选择 */
+  .type-selector {
+    display: flex;
+    gap: 12px;
+  }
+
+  .type-option {
+    flex: 1;
+    padding: 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--bg-primary);
+  }
+
+  .type-option:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+  }
+
+  .type-option.selected {
+    border-color: var(--accent-primary);
+    background: var(--bg-tag);
+    box-shadow: 0 4px 12px rgba(244, 162, 97, 0.2);
+  }
+
+  .type-option .icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .type-option .label {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* 状态选择 */
+  .status-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .status-option {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+
+  .status-option:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .status-option.selected {
+    border-color: var(--accent-primary);
+    background: var(--accent-gradient);
+    color: white;
+  }
+
+  /* 星星评分 */
+  .rating-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rating-stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .rating-star {
+    font-size: 32px;
+    color: var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .rating-star:hover {
+    transform: scale(1.2);
+  }
+
+  .rating-star.active {
+    color: var(--star-color);
+  }
+
+  .rating-star.hover {
+    color: var(--star-color);
+    opacity: 0.7;
+  }
+
+  .rating-value {
+    font-size: 16px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* 封面上传 */
+  .cover-upload {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .cover-preview {
+    width: 80px;
+    height: 100px;
+    border-radius: 10px;
+    background: var(--bg-tag);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cover-preview .upload-icon {
+    font-size: 28px;
+    opacity: 0.5;
+  }
+
+  .cover-input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .upload-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .upload-btn:hover {
+    background: var(--border-color);
+  }
+
+  .upload-btn input {
+    display: none;
+  }
+
+  .or-text {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-align: center;
+  }
+
+  /* 标签输入 */
+  .tags-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+  }
+
+  .tag-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 13px;
+    color: white;
+  }
+
+  .tag-remove {
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .tag-remove:hover {
+    opacity: 1;
+  }
+
+  .tag-input {
+    flex: 1;
+    min-width: 100px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--text-primary);
+    font-family: inherit;
+  }
+
+  .tag-suggestions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag-suggestion {
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tag-suggestion:hover {
+    background: var(--border-color);
+  }
+
+  /* 进度输入 */
+  .progress-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-tag);
+    outline: none;
+  }
+
+  .progress-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .progress-value-display {
+    font-size: 14px;
+    color: var(--text-secondary);
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* 金句区域 */
+  .quotes-editor {
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .quotes-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .quotes-editor-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .add-quote-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+  }
+
+  .add-quote-btn:hover {
+    background: var(--border-color);
+  }
+
+  .quote-input-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .quote-input-item textarea {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    outline: none;
+    resize: vertical;
+    min-height: 40px;
+    font-family: inherit;
+  }
+
+  .quote-input-item textarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .remove-quote-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .remove-quote-btn:hover {
+    background: #FFE0E0;
+    color: var(--danger);
+  }
+
+  /* 弹窗底部 */
+  .modal-footer {
+    padding: 16px 24px 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-weight: 500;
+  }
+
+  .btn-cancel {
+    background: var(--bg-tag);
+    color: var(--text-secondary);
+  }
+
+  .btn-cancel:hover {
+    background: var(--border-color);
+  }
+
+  .btn-primary {
+    background: var(--accent-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 162, 97, 0.5);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #C0392B 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.5);
+  }
+
+  /* 删除确认弹窗 */
+  .confirm-modal {
+    max-width: 360px;
+    text-align: center;
+  }
+
+  .confirm-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .confirm-text {
+    font-size: 16px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .confirm-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    z-index: 2000;
+    transition: top 0.3s ease;
+  }
+
+  .toast.show {
+    top: 30px;
+  }
+
+  .toast.success {
+    background: rgba(46, 139, 87, 0.9);
+  }
+
+  .toast.error {
+    background: rgba(192, 57, 43, 0.9);
+  }
+
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.6;
+  }
+
+  .empty-text {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .empty-btn {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .empty-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(244, 162, 97, 0.5);
+  }
+
+  /* 响应式 */
+  @media (max-width: 1024px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+    }
+    .mobile-menu-btn {
+      display: block !important;
+    }
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 60px 16px 20px;
+    }
+    .page-title {
+      font-size: 22px;
+    }
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .filter-right {
+      justify-content: space-between;
+    }
+    .search-input {
+      width: 100%;
+    }
+    .search-input:focus {
+      width: 100%;
+    }
+    .cards-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .card-cover {
+      height: 140px;
+    }
+    .type-selector {
+      gap: 8px;
+    }
+    .type-option {
+      padding: 12px 8px;
+    }
+    .type-option .icon {
+      font-size: 24px;
+    }
+    .type-option .label {
+      font-size: 12px;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .goal-cards {
+      grid-template-columns: 1fr;
+    }
+    .quotes-list {
+      grid-template-columns: 1fr;
+    }
+    .list-item {
+      flex-wrap: wrap;
+    }
+    .list-meta {
+      flex-wrap: wrap;
+    }
+  }
+
+  /* 错误提示 */
+  .error-text {
+    font-size: 12px;
+    color: var(--danger);
+    margin-top: 4px;
+    display: none;
+  }
+
+  .form-group.error .form-input,
+  .form-group.error .form-textarea,
+  .form-group.error .tags-input-container {
+    border-color: var(--danger);
+  }
+
+  .form-group.error .error-text {
+    display: block;
+  }
+
+  /* 滚动条样式 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tag);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+  }
+</style>
+</head>
+<body data-theme="warm">
+  <!-- 移动端菜单按钮 -->
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="app-container">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">📚 我的书影音</div>
+        <div class="logo-subtitle">记录每一次心动</div>
+      </div>
+      
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <div class="nav-link active" data-page="records" onclick="switchPage('records')">
+              <span class="nav-icon">📖</span>
+              <span>全部记录</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" data-page="stats" onclick="switchPage('stats')">
+              <span class="nav-icon">📊</span>
+              <span>统计报告</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" data-page="goals" onclick="switchPage('goals')">
+              <span class="nav-icon">🎯</span>
+              <span>目标进度</span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" data-page="quotes" onclick="switchPage('quotes')">
+              <span class="nav-icon">💬</span>
+              <span>金句摘录</span>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 主题切换 -->
+      <div class="theme-section">
+        <div class="theme-title">主题风格</div>
+        <div class="theme-options">
+          <button class="theme-btn warm active" onclick="setTheme('warm')" title="温馨奶茶"></button>
+          <button class="theme-btn cute" onclick="setTheme('cute')" title="可爱粉色"></button>
+          <button class="theme-btn cool" onclick="setTheme('cool')" title="炫酷赛博"></button>
+          <button class="theme-btn dark" onclick="setTheme('dark')" title="深色模式"></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 记录列表页 -->
+      <div class="page active" id="page-records">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">全部记录</h1>
+            <p class="page-subtitle">你的书影音收藏夹</p>
+          </div>
+          <button class="add-btn" onclick="openAddModal()">➕ 添加记录</button>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+          <div class="filter-left">
+            <div class="filter-tags">
+              <button class="filter-tag active" data-type="all" onclick="filterByType('all')">全部</button>
+              <button class="filter-tag" data-type="book" onclick="filterByType('book')">📚 书本</button>
+              <button class="filter-tag" data-type="music" onclick="filterByType('music')">🎵 音乐</button>
+              <button class="filter-tag" data-type="movie" onclick="filterByType('movie')">🎬 电影</button>
+            </div>
+            <div class="tag-filters">
+              <span class="tag-filter-label">标签：</span>
+              <span class="tag-dot" data-tag="all" onclick="filterByTag('all')" style="background: var(--text-tertiary)" title="全部">✓</span>
+              <span class="tag-dot" data-tag="治愈" onclick="filterByTag('治愈')" style="background: #98D8AA" title="治愈">治</span>
+              <span class="tag-dot" data-tag="烧脑" onclick="filterByTag('烧脑')" style="background: #9370DB" title="烧脑">烧</span>
+              <span class="tag-dot" data-tag="催泪" onclick="filterByTag('催泪')" style="background: #FF8B8B" title="催泪">泪</span>
+              <span class="tag-dot" data-tag="经典" onclick="filterByTag('经典')" style="background: #FFD93D" title="经典">经</span>
+              <span class="tag-dot" data-tag="推荐" onclick="filterByTag('推荐')" style="background: #6BCB77" title="推荐">推</span>
+            </div>
+          </div>
+          <div class="filter-right">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="search-input" placeholder="搜索书名/感想..." oninput="handleSearch(this.value)">
+            </div>
+            <div class="view-switcher">
+              <button class="view-btn active" data-view="grid" onclick="switchView('grid')" title="卡片视图">▦</button>
+              <button class="view-btn" data-view="list" onclick="switchView('list')" title="列表视图">☰</button>
+              <button class="view-btn" data-view="timeline" onclick="switchView('timeline')" title="时间线">⏱</button>
+            </div>
+            <select class="sort-select" id="sortSelect" onchange="sortRecords(this.value)">
+              <option value="date-desc">时间倒序</option>
+              <option value="date-asc">时间正序</option>
+              <option value="rating-desc">评分从高到低</option>
+              <option value="rating-asc">评分从低到高</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 记录总数 -->
+        <div style="margin-bottom: 16px;">
+          <span class="count-text" id="countText">共 0 条记录</span>
+        </div>
+
+        <!-- 卡片网格视图 -->
+        <div class="cards-grid" id="cardsGrid">
+          <!-- 动态生成 -->
+        </div>
+
+        <!-- 列表视图 -->
+        <div class="list-view" id="listView" style="display: none;">
+          <!-- 动态生成 -->
+        </div>
+
+        <!-- 时间线视图 -->
+        <div class="timeline-view" id="timelineView" style="display: none;">
+          <!-- 动态生成 -->
+        </div>
+
+        <!-- 空状态 -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-icon">📖</div>
+          <div class="empty-text">还没有记录哦～</div>
+          <button class="empty-btn" onclick="openAddModal()">添加第一条记录</button>
+        </div>
+      </div>
+
+      <!-- 统计报告页 -->
+      <div class="page" id="page-stats">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">统计报告</h1>
+            <p class="page-subtitle">你的书影音数据总览</p>
+          </div>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="statTotalBooks">0</div>
+            <div class="stat-label">已读书本</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🎵</div>
+            <div class="stat-value" id="statTotalMusic">0</div>
+            <div class="stat-label">收藏音乐</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-value" id="statTotalMovies">0</div>
+            <div class="stat-label">观看电影</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value" id="statAvgRating">0</div>
+            <div class="stat-label">平均评分</div>
+          </div>
+        </div>
+
+        <!-- 类型分布 -->
+        <div class="stats-section">
+          <h3 class="section-title">📊 类型分布</h3>
+          <div class="type-distribution">
+            <div class="distribution-chart" id="distributionChart">
+              <div class="distribution-center">
+                <div class="distribution-total" id="distTotal">0</div>
+                <div class="distribution-label">总计</div>
+              </div>
+            </div>
+            <div class="distribution-legend">
+              <div class="legend-item">
+                <div class="legend-color book"></div>
+                <span class="legend-name">书本</span>
+                <span class="legend-count" id="legendBookCount">0</span>
+              </div>
+              <div class="legend-bar">
+                <div class="legend-bar-fill" id="legendBookBar" style="background: #6B8E23; width: 0%;"></div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color music"></div>
+                <span class="legend-name">音乐</span>
+                <span class="legend-count" id="legendMusicCount">0</span>
+              </div>
+              <div class="legend-bar">
+                <div class="legend-bar-fill" id="legendMusicBar" style="background: #9370DB; width: 0%;"></div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color movie"></div>
+                <span class="legend-name">电影</span>
+                <span class="legend-count" id="legendMovieCount">0</span>
+              </div>
+              <div class="legend-bar">
+                <div class="legend-bar-fill" id="legendMovieBar" style="background: #CD5C5C; width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 评分分布 -->
+        <div class="stats-section">
+          <h3 class="section-title">⭐ 评分分布</h3>
+          <div class="rating-distribution" id="ratingDistribution">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+
+        <!-- 日历热力图 -->
+        <div class="stats-section">
+          <h3 class="section-title">📅 记录热力图</h3>
+          <div class="heatmap-container">
+            <div class="heatmap" id="heatmap">
+              <!-- 动态生成 -->
+            </div>
+          </div>
+          <div class="heatmap-labels">
+            <span>过去一年</span>
+            <div class="heatmap-legend">
+              <span>少</span>
+              <span class="heatmap-day"></span>
+              <span class="heatmap-day level-1"></span>
+              <span class="heatmap-day level-2"></span>
+              <span class="heatmap-day level-3"></span>
+              <span class="heatmap-day level-4"></span>
+              <span>多</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 月度趋势 -->
+        <div class="stats-section">
+          <h3 class="section-title">📈 月度记录趋势</h3>
+          <div class="monthly-chart" id="monthlyChart">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 目标进度页 -->
+      <div class="page" id="page-goals">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">年度目标</h1>
+            <p class="page-subtitle">设定目标，追踪进度</p>
+          </div>
+        </div>
+
+        <div class="goal-cards">
+          <div class="goal-card">
+            <div class="goal-type">
+              <span class="goal-type-icon">📚</span>
+              <span class="goal-type-name">阅读目标</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-progress-bar">
+                <div class="goal-progress-fill" id="bookGoalProgress" style="width: 0%;"></div>
+              </div>
+              <div class="goal-text">
+                <span>已完成 <span class="current" id="bookGoalCurrent">0</span> 本</span>
+                <span>目标 <span id="bookGoalTarget">12</span> 本</span>
+              </div>
+            </div>
+            <div class="goal-setting">
+              <input type="number" class="goal-input" id="bookGoalInput" placeholder="设定年度目标" min="1" value="12">
+              <button class="goal-save-btn" onclick="saveGoal('book')">保存</button>
+            </div>
+          </div>
+
+          <div class="goal-card">
+            <div class="goal-type">
+              <span class="goal-type-icon">🎵</span>
+              <span class="goal-type-name">音乐目标</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-progress-bar">
+                <div class="goal-progress-fill" id="musicGoalProgress" style="width: 0%;"></div>
+              </div>
+              <div class="goal-text">
+                <span>已收藏 <span class="current" id="musicGoalCurrent">0</span> 首</span>
+                <span>目标 <span id="musicGoalTarget">50</span> 首</span>
+              </div>
+            </div>
+            <div class="goal-setting">
+              <input type="number" class="goal-input" id="musicGoalInput" placeholder="设定年度目标" min="1" value="50">
+              <button class="goal-save-btn" onclick="saveGoal('music')">保存</button>
+            </div>
+          </div>
+
+          <div class="goal-card">
+            <div class="goal-type">
+              <span class="goal-type-icon">🎬</span>
+              <span class="goal-type-name">观影目标</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-progress-bar">
+                <div class="goal-progress-fill" id="movieGoalProgress" style="width: 0%;"></div>
+              </div>
+              <div class="goal-text">
+                <span>已观看 <span class="current" id="movieGoalCurrent">0</span> 部</span>
+                <span>目标 <span id="movieGoalTarget">24</span> 部</span>
+              </div>
+            </div>
+            <div class="goal-setting">
+              <input type="number" class="goal-input" id="movieGoalInput" placeholder="设定年度目标" min="1" value="24">
+              <button class="goal-save-btn" onclick="saveGoal('movie')">保存</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 进行中的记录 -->
+        <div class="stats-section">
+          <h3 class="section-title">📖 进行中</h3>
+          <div id="inProgressList">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 金句摘录页 -->
+      <div class="page" id="page-quotes">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">金句摘录</h1>
+            <p class="page-subtitle">那些打动你的文字</p>
+          </div>
+        </div>
+
+        <div class="quotes-list" id="quotesList">
+          <!-- 动态生成 -->
+        </div>
+
+        <div class="empty-state" id="quotesEmptyState" style="display: none;">
+          <div class="empty-icon">💬</div>
+          <div class="empty-text">还没有金句摘录～</div>
+          <div style="font-size: 14px; color: var(--text-tertiary); margin-bottom: 20px;">在添加记录时保存你喜欢的句子吧</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 添加/编辑记录弹窗 -->
+  <div class="modal-overlay" id="recordModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">添加新记录</h3>
+        <button class="close-btn" onclick="closeRecordModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="recordForm">
+          <input type="hidden" id="recordId">
+          
+          <div class="form-group" id="typeGroup">
+            <label class="form-label">记录类型<span class="required">*</span></label>
+            <div class="type-selector">
+              <div class="type-option" data-type="book" onclick="selectType('book')">
+                <div class="icon">📚</div>
+                <div class="label">书本</div>
+              </div>
+              <div class="type-option" data-type="music" onclick="selectType('music')">
+                <div class="icon">🎵</div>
+                <div class="label">音乐</div>
+              </div>
+              <div class="type-option" data-type="movie" onclick="selectType('movie')">
+                <div class="icon">🎬</div>
+                <div class="label">电影</div>
+              </div>
+            </div>
+            <div class="error-text">请选择记录类型</div>
+          </div>
+
+          <div class="form-group" id="nameGroup">
+            <label class="form-label">名称<span class="required">*</span></label>
+            <input type="text" class="form-input" id="recordName" placeholder="如：百年孤独、晴天、肖申克的救赎">
+            <div class="error-text">请输入名称</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">封面图片</label>
+            <div class="cover-upload">
+              <div class="cover-preview" id="coverPreview">
+                <span class="upload-icon">🖼️</span>
+              </div>
+              <div class="cover-input-wrapper">
+                <label class="upload-btn">
+                  <input type="file" accept="image/*" onchange="handleFileUpload(event)">
+                  上传本地图片
+                </label>
+                <span class="or-text">或</span>
+                <input type="text" class="form-input" id="coverUrl" placeholder="输入图片链接 URL" oninput="handleUrlInput(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">状态</label>
+            <div class="status-selector">
+              <span class="status-option selected" data-status="done" onclick="selectStatus('done')">✅ 已完成</span>
+              <span class="status-option" data-status="in-progress" onclick="selectStatus('in-progress')">📖 进行中</span>
+              <span class="status-option" data-status="todo" onclick="selectStatus('todo')">📋 想做</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="progressGroup" style="display: none;">
+            <label class="form-label">进度</label>
+            <div class="progress-input-group">
+              <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0" oninput="updateProgressDisplay(this.value)">
+              <span class="progress-value-display" id="progressValueDisplay">0%</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="ratingGroup">
+            <label class="form-label">星级评分<span class="required">*</span></label>
+            <div class="rating-input">
+              <div class="rating-stars" id="ratingStars">
+                <span class="rating-star" data-value="1" onclick="setRating(1)" onmouseover="previewRating(1)" onmouseout="resetRating()">★</span>
+                <span class="rating-star" data-value="2" onclick="setRating(2)" onmouseover="previewRating(2)" onmouseout="resetRating()">★</span>
+                <span class="rating-star" data-value="3" onclick="setRating(3)" onmouseover="previewRating(3)" onmouseout="resetRating()">★</span>
+                <span class="rating-star" data-value="4" onclick="setRating(4)" onmouseover="previewRating(4)" onmouseout="resetRating()">★</span>
+                <span class="rating-star" data-value="5" onclick="setRating(5)" onmouseover="previewRating(5)" onmouseout="resetRating()">★</span>
+              </div>
+              <span class="rating-value" id="ratingValue">未评分</span>
+            </div>
+            <div class="error-text">请选择评分</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">标签</label>
+            <div class="tags-input-container" id="tagsContainer">
+              <input type="text" class="tag-input" id="tagInput" placeholder="输入标签后按回车添加..." onkeydown="handleTagInput(event)">
+            </div>
+            <div class="tag-suggestions">
+              <span class="tag-suggestion" onclick="addTag('治愈')">治愈</span>
+              <span class="tag-suggestion" onclick="addTag('烧脑')">烧脑</span>
+              <span class="tag-suggestion" onclick="addTag('催泪')">催泪</span>
+              <span class="tag-suggestion" onclick="addTag('经典')">经典</span>
+              <span class="tag-suggestion" onclick="addTag('推荐')">推荐</span>
+              <span class="tag-suggestion" onclick="addTag('轻松')">轻松</span>
+              <span class="tag-suggestion" onclick="addTag('深刻')">深刻</span>
+              <span class="tag-suggestion" onclick="addTag('励志')">励志</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">感想评价</label>
+            <textarea class="form-textarea" id="recordThought" placeholder="写下你的感想、评价或感悟..." maxlength="500" oninput="updateCharCount()"></textarea>
+            <div style="text-align: right; font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">
+              <span id="charCount">0</span>/500
+            </div>
+          </div>
+
+          <!-- 金句摘录区域 -->
+          <div class="quotes-editor">
+            <div class="quotes-editor-header">
+              <span class="quotes-editor-title">💬 金句摘录</span>
+              <button type="button" class="add-quote-btn" onclick="addQuoteInput()">+ 添加金句</button>
+            </div>
+            <div id="quotesInputsContainer">
+              <!-- 动态生成金句输入框 -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="closeRecordModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveRecord()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除确认弹窗 -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal confirm-modal">
+      <div class="modal-body">
+        <div class="confirm-icon">🗑️</div>
+        <h3 class="modal-title" style="margin-bottom: 12px;">确认删除</h3>
+        <p class="confirm-text">确定要删除这条记录吗？<br>删除后无法恢复哦。</p>
+        <div class="confirm-buttons">
+          <button class="btn btn-cancel" onclick="closeDeleteModal()">取消</button>
+          <button class="btn btn-danger" onclick="confirmDelete()">确认删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- 热力图提示 -->
+  <div class="heatmap-tooltip" id="heatmapTooltip"></div>
+
+<script>
+  // ========== 数据存储 ==========
+  let records = [];
+  let currentFilter = 'all';
+  let currentTagFilter = 'all';
+  let currentSort = 'date-desc';
+  let currentView = 'grid';
+  let currentRating = 0;
+  let selectedType = '';
+  let selectedStatus = 'done';
+  let currentCover = '';
+  let currentTags = [];
+  let currentQuotes = [];
+  let deleteRecordId = null;
+  let editingId = null;
+  let searchQuery = '';
+
+  // 目标设置
+  let goals = {
+    book: 12,
+    music: 50,
+    movie: 24
+  };
+
+  // 标签颜色
+  const tagColors = {
+    '治愈': '#98D8AA',
+    '烧脑': '#9370DB',
+    '催泪': '#FF8B8B',
+    '经典': '#FFD93D',
+    '推荐': '#6BCB77',
+    '轻松': '#87CEEB',
+    '深刻': '#6B5B95',
+    '励志': '#FFA07A'
+  };
+
+  // 类型图标和名称
+  const typeIcons = { book: '📚', music: '🎵', movie: '🎬' };
+  const typeLabels = { book: '书本', music: '音乐', movie: '电影' };
+
+  // 状态图标
+  const statusLabels = {
+    'done': '已完成',
+    'in-progress': '进行中',
+    'todo': '想做'
+  };
+
+  // 默认示例数据
+  const defaultRecords = [
+    {
+      id: 1,
+      type: 'book',
+      name: '百年孤独',
+      cover: '',
+      rating: 5,
+      thought: '魔幻现实主义的巅峰之作，马尔克斯的文字像魔法一样。布恩迪亚家族七代人的兴衰让人唏嘘，生命中所有的灿烂，原来终究都需要用寂寞来偿还。',
+      tags: ['经典', '深刻'],
+      status: 'done',
+      progress: 100,
+      quotes: ['生命中曾经有过的所有灿烂，原来终究都需要用寂寞来偿还。', '过去都是假的，回忆是一条没有归途的路。'],
+      date: '2026.06.15',
+      timestamp: new Date('2026-06-15').getTime()
+    },
+    {
+      id: 2,
+      type: 'music',
+      name: '晴天',
+      cover: '',
+      rating: 4,
+      thought: '周杰伦的经典，每次听都想起学生时代的夏天。风掠过教室的味道，操场边的梧桐树，还有那个穿白衬衫的少年。',
+      tags: ['治愈', '经典'],
+      status: 'done',
+      progress: 100,
+      quotes: ['故事的小黄花，从出生那年就飘着。'],
+      date: '2026.06.10',
+      timestamp: new Date('2026-06-10').getTime()
+    },
+    {
+      id: 3,
+      type: 'movie',
+      name: '肖申克的救赎',
+      cover: '',
+      rating: 5,
+      thought: '希望是个好东西，也许是最好的东西，好东西永远不会消逝。每次看都有不同的感悟，真正的自由是内心的救赎。',
+      tags: ['经典', '励志'],
+      status: 'done',
+      progress: 100,
+      quotes: ['希望是件美丽的事，也许是最好的事，美好的事永不消逝。', '要么忙着活，要么忙着死。'],
+      date: '2026.06.05',
+      timestamp: new Date('2026-06-05').getTime()
+    },
+    {
+      id: 4,
+      type: 'book',
+      name: '小王子',
+      cover: '',
+      rating: 5,
+      thought: '所有大人都曾是小孩，虽然只有少数人记得。每个年龄读都有不同的感悟，长大后再读，看到的是童真的可贵。',
+      tags: ['治愈', '经典', '推荐'],
+      status: 'done',
+      progress: 100,
+      quotes: ['真正重要的东西，用眼睛是看不见的。', '你在你的玫瑰花身上耗费的时间，使得你的玫瑰花变得如此重要。'],
+      date: '2026.05.28',
+      timestamp: new Date('2026-05-28').getTime()
+    },
+    {
+      id: 5,
+      type: 'music',
+      name: '起风了',
+      cover: '',
+      rating: 4,
+      thought: '买辣椒也用券的版本，歌词很有画面感，适合一个人安静的时候听。心之所动，就随风去了。',
+      tags: ['治愈'],
+      status: 'done',
+      progress: 100,
+      quotes: ['心之所动，就随风去了。', '以爱之名，你还愿意吗？'],
+      date: '2026.05.20',
+      timestamp: new Date('2026-05-20').getTime()
+    },
+    {
+      id: 6,
+      type: 'movie',
+      name: '千与千寻',
+      cover: '',
+      rating: 5,
+      thought: '宫崎骏的作品永远治愈。白龙、无脸男、汤婆婆，每个角色都让人难忘。成长就是一边失去一边学会坚强。',
+      tags: ['治愈', '经典', '推荐'],
+      status: 'done',
+      progress: 100,
+      quotes: ['不管前方的路有多苦，只要走的方向正确，不管多么崎岖不平，都比站在原地更接近幸福。'],
+      date: '2026.05.15',
+      timestamp: new Date('2026-05-15').getTime()
+    },
+    {
+      id: 7,
+      type: 'book',
+      name: '活着',
+      cover: '',
+      rating: 4,
+      thought: '余华的文字朴实却有力量，福贵的一生让人心疼，也让人思考活着的意义。活着本身就是活着的意义。',
+      tags: ['深刻', '催泪'],
+      status: 'done',
+      progress: 100,
+      quotes: ['人是为活着本身而活着的，而不是为了活着之外的任何事物所活着。'],
+      date: '2026.05.08',
+      timestamp: new Date('2026-05-08').getTime()
+    },
+    {
+      id: 8,
+      type: 'music',
+      name: '海阔天空',
+      cover: '',
+      rating: 5,
+      thought: 'Beyond 的经典，每次低谷的时候听都能获得力量。原谅我这一生不羁放纵爱自由。',
+      tags: ['经典', '励志'],
+      status: 'done',
+      progress: 100,
+      quotes: ['原谅我这一生不羁放纵爱自由，也会怕有一天会跌倒。'],
+      date: '2026.05.01',
+      timestamp: new Date('2026-05-01').getTime()
+    },
+    {
+      id: 9,
+      type: 'book',
+      name: '三体',
+      cover: '',
+      rating: 5,
+      thought: '中国科幻的巅峰之作！黑暗森林法则、降维打击、猜疑链...每个概念都让人震撼。大刘的想象力太惊人了。',
+      tags: ['烧脑', '经典', '推荐'],
+      status: 'in-progress',
+      progress: 65,
+      quotes: ['弱小和无知不是生存的障碍，傲慢才是。', '给岁月以文明，而不是给文明以岁月。'],
+      date: '2026.04.20',
+      timestamp: new Date('2026-04-20').getTime()
+    },
+    {
+      id: 10,
+      type: 'movie',
+      name: '盗梦空间',
+      cover: '',
+      rating: 5,
+      thought: '诺兰神作！多层梦境的设定太精彩了，看完脑子转了好久。最后那个陀螺到底停没停？',
+      tags: ['烧脑', '经典'],
+      status: 'done',
+      progress: 100,
+      quotes: ['我们都知道梦不是真的，但为什么感觉那么真实？'],
+      date: '2026.04.10',
+      timestamp: new Date('2026-04-10').getTime()
+    }
+  ];
+
+  // ========== 初始化 ==========
+  function init() {
+    loadData();
+    renderRecords();
+    renderStats();
+    renderGoals();
+    renderQuotes();
+    initTheme();
+  }
+
+  function loadData() {
+    const savedRecords = localStorage.getItem('bookMovieMusicRecords');
+    const savedGoals = localStorage.getItem('bookMovieMusicGoals');
+    const savedTheme = localStorage.getItem('bookMovieMusicTheme');
+
+    if (savedRecords) {
+      records = JSON.parse(savedRecords);
+    } else {
+      records = defaultRecords;
+      saveRecords();
+    }
+
+    if (savedGoals) {
+      goals = JSON.parse(savedGoals);
+    }
+  }
+
+  function saveRecords() {
+    localStorage.setItem('bookMovieMusicRecords', JSON.stringify(records));
+  }
+
+  function saveGoals() {
+    localStorage.setItem('bookMovieMusicGoals', JSON.stringify(goals));
+  }
+
+  // ========== 主题切换 ==========
+  function initTheme() {
+    const savedTheme = localStorage.getItem('bookMovieMusicTheme') || 'warm';
+    setTheme(savedTheme);
+  }
+
+  function setTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('bookMovieMusicTheme', theme);
+    
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.classList.contains(theme));
+    });
+  }
+
+  // ========== 页面切换 ==========
+  function switchPage(page) {
+    // 更新导航
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.toggle('active', link.dataset.page === page);
+    });
+
+    // 切换页面
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+    });
+    document.getElementById(`page-${page}`).classList.add('active');
+
+    // 移动端关闭侧边栏
+    if (window.innerWidth <= 1024) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    // 如果是统计页，重新渲染
+    if (page === 'stats') {
+      renderStats();
+    } else if (page === 'goals') {
+      renderGoals();
+    } else if (page === 'quotes') {
+      renderQuotes();
+    }
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // ========== 视图切换 ==========
+  function switchView(view) {
+    currentView = view;
+    
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    document.getElementById('cardsGrid').style.display = view === 'grid' ? 'grid' : 'none';
+    document.getElementById('listView').style.display = view === 'list' ? 'flex' : 'none';
+    document.getElementById('timelineView').style.display = view === 'timeline' ? 'block' : 'none';
+
+    renderRecords();
+  }
+
+  // ========== 筛选与排序 ==========
+  function filterByType(type) {
+    currentFilter = type;
+    document.querySelectorAll('.filter-tag').forEach(tag => {
+      tag.classList.toggle('active', tag.dataset.type === type);
+    });
+    renderRecords();
+  }
+
+  function filterByTag(tag) {
+    currentTagFilter = tag;
+    document.querySelectorAll('.tag-dot').forEach(dot => {
+      dot.style.outline = dot.dataset.tag === tag ? '2px solid var(--text-primary)' : 'none';
+    });
+    renderRecords();
+  }
+
+  function handleSearch(query) {
+    searchQuery = query.toLowerCase();
+    renderRecords();
+  }
+
+  function sortRecords(sortType) {
+    currentSort = sortType;
+    renderRecords();
+  }
+
+  function getFilteredRecords() {
+    let filtered = [...records];
+
+    // 类型筛选
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(r => r.type === currentFilter);
+    }
+
+    // 标签筛选
+    if (currentTagFilter !== 'all') {
+      filtered = filtered.filter(r => r.tags && r.tags.includes(currentTagFilter));
+    }
+
+    // 搜索
+    if (searchQuery) {
+      filtered = filtered.filter(r => 
+        r.name.toLowerCase().includes(searchQuery) ||
+        (r.thought && r.thought.toLowerCase().includes(searchQuery))
+      );
+    }
+
+    // 排序
+    switch (currentSort) {
+      case 'date-desc':
+        filtered.sort((a, b) => b.timestamp - a.timestamp);
+        break;
+      case 'date-asc':
+        filtered.sort((a, b) => a.timestamp - b.timestamp);
+        break;
+      case 'rating-desc':
+        filtered.sort((a, b) => b.rating - a.rating || b.timestamp - a.timestamp);
+        break;
+      case 'rating-asc':
+        filtered.sort((a, b) => a.rating - b.rating || b.timestamp - a.timestamp);
+        break;
+    }
+
+    return filtered;
+  }
+
+  // ========== 渲染记录 ==========
+  function renderRecords() {
+    const filtered = getFilteredRecords();
+    
+    document.getElementById('countText').textContent = `共 ${filtered.length} 条记录`;
+
+    // 空状态
+    const emptyState = document.getElementById('emptyState');
+    const hasRecords = filtered.length > 0;
+    
+    document.getElementById('cardsGrid').style.display = currentView === 'grid' && hasRecords ? 'grid' : 'none';
+    document.getElementById('listView').style.display = currentView === 'list' && hasRecords ? 'flex' : 'none';
+    document.getElementById('timelineView').style.display = currentView === 'timeline' && hasRecords ? 'block' : 'none';
+    emptyState.style.display = hasRecords ? 'none' : 'block';
+
+    if (!hasRecords) return;
+
+    if (currentView === 'grid') {
+      renderGridView(filtered);
+    } else if (currentView === 'list') {
+      renderListView(filtered);
+    } else if (currentView === 'timeline') {
+      renderTimelineView(filtered);
+    }
+  }
+
+  function generateStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      stars += `<span class="star ${i <= rating ? 'filled' : ''}">★</span>`;
+    }
+    return stars;
+  }
+
+  function generateTagsHtml(tags) {
+    if (!tags || tags.length === 0) return '';
+    return tags.map(tag => {
+      const color = tagColors[tag] || '#ccc';
+      return `<span class="card-tag" style="background: ${color}20; color: ${color}">${tag}</span>`;
+    }).join('');
+  }
+
+  function renderGridView(records) {
+    const grid = document.getElementById('cardsGrid');
+    grid.innerHTML = records.map(record => {
+      const coverHtml = record.cover 
+        ? `<img src="${record.cover}" alt="${record.name}" onerror="this.outerHTML='<span class=default-icon>${typeIcons[record.type]}</span>'">`
+        : `<span class="default-icon">${typeIcons[record.type]}</span>`;
+
+      const progressHtml = record.status === 'in-progress' ? `
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: ${record.progress || 0}%"></div>
+        </div>
+        <div class="progress-text">进度 ${record.progress || 0}%</div>
+      ` : '';
+
+      return `
+        <div class="record-card">
+          <div class="card-cover">
+            ${coverHtml}
+            <span class="type-badge ${record.type}">${typeLabels[record.type]}</span>
+            ${record.status !== 'done' ? `<span class="status-badge">${statusLabels[record.status]}</span>` : ''}
+          </div>
+          <div class="card-content">
+            <h3 class="card-name">${record.name}</h3>
+            <div class="card-rating">
+              <div class="stars">${generateStars(record.rating)}</div>
+              <span class="rating-text">${record.rating}.0</span>
+            </div>
+            <div class="card-tags">${generateTagsHtml(record.tags)}</div>
+            <p class="card-thought">${record.thought || '暂无感想'}</p>
+            ${progressHtml}
+            <div class="card-footer">
+              <span class="card-date">${record.date}</span>
+              <div class="card-actions">
+                <button class="action-btn" onclick="editRecord(${record.id})" title="编辑">✏️</button>
+                <button class="action-btn delete" onclick="showDeleteModal(${record.id})" title="删除">🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderListView(records) {
+    const list = document.getElementById('listView');
+    list.innerHTML = records.map(record => {
+      const coverHtml = record.cover 
+        ? `<img src="${record.cover}" alt="${record.name}" onerror="this.outerHTML='${typeIcons[record.type]}'">`
+        : typeIcons[record.type];
+
+      return `
+        <div class="list-item">
+          <div class="list-cover">${coverHtml}</div>
+          <div class="list-info">
+            <div class="list-title">${record.name}</div>
+            <div class="list-meta">
+              <span>${typeLabels[record.type]}</span>
+              <span>·</span>
+              <div class="list-rating">
+                ${generateStars(record.rating)}
+              </div>
+              <span>·</span>
+              <span>${record.date}</span>
+            </div>
+            <div class="list-tags">${generateTagsHtml(record.tags)}</div>
+          </div>
+          <div class="list-actions">
+            <button class="action-btn" onclick="editRecord(${record.id})" title="编辑">✏️</button>
+            <button class="action-btn delete" onclick="showDeleteModal(${record.id})" title="删除">🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTimelineView(records) {
+    const timeline = document.getElementById('timelineView');
+    timeline.innerHTML = records.map(record => `
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">${record.date}</div>
+        <div class="timeline-title">
+          <span class="timeline-type">${typeIcons[record.type]}</span>
+          ${record.name}
+        </div>
+        <div class="timeline-rating">${generateStars(record.rating)}</div>
+        <p class="timeline-thought">${record.thought || '暂无感想'}</p>
+        <div class="card-tags" style="margin-top: 10px;">${generateTagsHtml(record.tags)}</div>
+        <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+          <button class="action-btn" onclick="editRecord(${record.id})" title="编辑">✏️</button>
+          <button class="action-btn delete" onclick="showDeleteModal(${record.id})" title="删除">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ========== 添加/编辑弹窗 ==========
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('modalTitle').textContent = '添加新记录';
+    resetForm();
+    document.getElementById('recordModal').classList.add('show');
+  }
+
+  function editRecord(id) {
+    const record = records.find(r => r.id === id);
+    if (!record) return;
+
+    editingId = id;
+    document.getElementById('modalTitle').textContent = '编辑记录';
+    document.getElementById('recordId').value = id;
+    document.getElementById('recordName').value = record.name;
+    document.getElementById('recordThought').value = record.thought || '';
+    
+    // 类型
+    selectedType = record.type;
+    document.querySelectorAll('.type-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.type === record.type);
+    });
+
+    // 状态
+    selectedStatus = record.status || 'done';
+    document.querySelectorAll('.status-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.status === selectedStatus);
+    });
+    toggleProgressInput();
+
+    // 进度
+    const progress = record.progress || 0;
+    document.getElementById('progressSlider').value = progress;
+    updateProgressDisplay(progress);
+
+    // 评分
+    currentRating = record.rating;
+    updateStarsDisplay();
+
+    // 封面
+    currentCover = record.cover || '';
+    document.getElementById('coverUrl').value = record.cover || '';
+    updateCoverPreview();
+
+    // 标签
+    currentTags = [...(record.tags || [])];
+    renderTagsInput();
+
+    // 金句
+    currentQuotes = [...(record.quotes || [])];
+    renderQuotesInputs();
+
+    // 字数
+    updateCharCount();
+
+    // 清除错误状态
+    clearErrors();
+
+    document.getElementById('recordModal').classList.add('show');
+  }
+
+  function closeRecordModal() {
+    document.getElementById('recordModal').classList.remove('show');
+    setTimeout(() => {
+      resetForm();
+    }, 300);
+  }
+
+  function resetForm() {
+    editingId = null;
+    selectedType = '';
+    selectedStatus = 'done';
+    currentRating = 0;
+    currentCover = '';
+    currentTags = [];
+    currentQuotes = [];
+    
+    document.getElementById('recordId').value = '';
+    document.getElementById('recordName').value = '';
+    document.getElementById('recordThought').value = '';
+    document.getElementById('coverUrl').value = '';
+    document.getElementById('progressSlider').value = 0;
+    document.getElementById('progressValueDisplay').textContent = '0%';
+    
+    document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+    document.querySelectorAll('.status-option').forEach(opt => opt.classList.remove('selected'));
+    document.querySelector('.status-option[data-status="done"]').classList.add('selected');
+    
+    document.getElementById('ratingValue').textContent = '未评分';
+    document.querySelectorAll('.rating-star').forEach(star => star.classList.remove('active'));
+    document.getElementById('coverPreview').innerHTML = '<span class="upload-icon">🖼️</span>';
+    document.getElementById('charCount').textContent = '0';
+    document.getElementById('progressGroup').style.display = 'none';
+    
+    renderTagsInput();
+    renderQuotesInputs();
+    clearErrors();
+  }
+
+  function selectType(type) {
+    selectedType = type;
+    document.querySelectorAll('.type-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.type === type);
+    });
+    document.getElementById('typeGroup').classList.remove('error');
+  }
+
+  function selectStatus(status) {
+    selectedStatus = status;
+    document.querySelectorAll('.status-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.status === status);
+    });
+    toggleProgressInput();
+  }
+
+  function toggleProgressInput() {
+    const progressGroup = document.getElementById('progressGroup');
+    if (selectedStatus === 'in-progress') {
+      progressGroup.style.display = 'block';
+    } else {
+      progressGroup.style.display = 'none';
+    }
+  }
+
+  function updateProgressDisplay(value) {
+    document.getElementById('progressValueDisplay').textContent = `${value}%`;
+  }
+
+  function setRating(rating) {
+    currentRating = rating;
+    updateStarsDisplay();
+    document.getElementById('ratingGroup').classList.remove('error');
+  }
+
+  function previewRating(rating) {
+    document.querySelectorAll('.rating-star').forEach((star, index) => {
+      star.classList.add('hover');
+      star.classList.toggle('hover', index < rating);
+    });
+  }
+
+  function resetRating() {
+    document.querySelectorAll('.rating-star').forEach(star => {
+      star.classList.remove('hover');
+    });
+  }
+
+  function updateStarsDisplay() {
+    document.querySelectorAll('.rating-star').forEach((star, index) => {
+      star.classList.toggle('active', index < currentRating);
+    });
+    document.getElementById('ratingValue').textContent = currentRating > 0 ? `${currentRating} 星` : '未评分';
+  }
+
+  // ========== 封面上传 ==========
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentCover = e.target.result;
+      updateCoverPreview();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleUrlInput(event) {
+    const url = event.target.value.trim();
+    if (url) {
+      currentCover = url;
+    } else {
+      currentCover = '';
+    }
+    updateCoverPreview();
+  }
+
+  function updateCoverPreview() {
+    const preview = document.getElementById('coverPreview');
+    if (currentCover) {
+      preview.innerHTML = `<img src="${currentCover}" alt="封面" onerror="this.outerHTML='<span class=upload-icon>🖼️</span>'">`;
+    } else {
+      preview.innerHTML = '<span class="upload-icon">🖼️</span>';
+    }
+  }
+
+  function updateCharCount() {
+    const text = document.getElementById('recordThought').value;
+    document.getElementById('charCount').textContent = text.length;
+  }
+
+  // ========== 标签管理 ==========
+  function handleTagInput(event) {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      const input = event.target;
+      const tag = input.value.trim().replace(/,/g, '');
+      if (tag && !currentTags.includes(tag)) {
+        addTag(tag);
+      }
+      input.value = '';
+    }
+  }
+
+  function addTag(tag) {
+    if (!currentTags.includes(tag) && currentTags.length < 10) {
+      currentTags.push(tag);
+      renderTagsInput();
+    }
+  }
+
+  function removeTag(tag) {
+    currentTags = currentTags.filter(t => t !== tag);
+    renderTagsInput();
+  }
+
+  function renderTagsInput() {
+    const container = document.getElementById('tagsContainer');
+    const input = document.getElementById('tagInput');
+    
+    // 移除所有标签芯片（保留输入框）
+    container.querySelectorAll('.tag-chip').forEach(chip => chip.remove());
+    
+    // 重新插入标签
+    currentTags.forEach(tag => {
+      const color = tagColors[tag] || '#888';
+      const chip = document.createElement('span');
+      chip.className = 'tag-chip';
+      chip.style.background = color;
+      chip.innerHTML = `${tag} <span class="tag-remove" onclick="removeTag('${tag}')">×</span>`;
+      container.insertBefore(chip, input);
+    });
+  }
+
+  // ========== 金句管理 ==========
+  function addQuoteInput() {
+    if (currentQuotes.length < 10) {
+      currentQuotes.push('');
+      renderQuotesInputs();
+    }
+  }
+
+  function removeQuoteInput(index) {
+    currentQuotes.splice(index, 1);
+    renderQuotesInputs();
+  }
+
+  function updateQuote(index, value) {
+    currentQuotes[index] = value;
+  }
+
+  function renderQuotesInputs() {
+    const container = document.getElementById('quotesInputsContainer');
+    container.innerHTML = currentQuotes.map((quote, index) => `
+      <div class="quote-input-item">
+        <textarea placeholder="输入金句..." oninput="updateQuote(${index}, this.value)">${quote}</textarea>
+        <button type="button" class="remove-quote-btn" onclick="removeQuoteInput(${index})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // ========== 表单验证与保存 ==========
+  function clearErrors() {
+    document.querySelectorAll('.form-group').forEach(group => {
+      group.classList.remove('error');
+    });
+  }
+
+  function validateForm() {
+    let valid = true;
+    clearErrors();
+
+    if (!selectedType) {
+      document.getElementById('typeGroup').classList.add('error');
+      valid = false;
+    }
+
+    const name = document.getElementById('recordName').value.trim();
+    if (!name) {
+      document.getElementById('nameGroup').classList.add('error');
+      valid = false;
+    }
+
+    if (currentRating === 0) {
+      document.getElementById('ratingGroup').classList.add('error');
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  function saveRecord() {
+    if (!validateForm()) {
+      showToast('请填写必填项', 'error');
+      return;
+    }
+
+    const name = document.getElementById('recordName').value.trim();
+    const thought = document.getElementById('recordThought').value.trim();
+    const progress = selectedStatus === 'in-progress' ? parseInt(document.getElementById('progressSlider').value) : (selectedStatus === 'done' ? 100 : 0);
+    
+    // 过滤空的金句
+    const quotes = currentQuotes.filter(q => q.trim());
+
+    const now = Date.now();
+
+    if (editingId) {
+      // 编辑
+      const index = records.findIndex(r => r.id === editingId);
+      if (index > -1) {
+        records[index] = {
+          ...records[index],
+          type: selectedType,
+          name: name,
+          cover: currentCover,
+          rating: currentRating,
+          thought: thought,
+          tags: currentTags,
+          status: selectedStatus,
+          progress: progress,
+          quotes: quotes
+        };
+      }
+      showToast('修改成功 ✓', 'success');
+    } else {
+      // 新增
+      const newRecord = {
+        id: now,
+        type: selectedType,
+        name: name,
+        cover: currentCover,
+        rating: currentRating,
+        thought: thought,
+        tags: currentTags,
+        status: selectedStatus,
+        progress: progress,
+        quotes: quotes,
+        date: formatDate(now),
+        timestamp: now
+      };
+      records.unshift(newRecord);
+      showToast('保存成功 ✓', 'success');
+    }
+
+    saveRecords();
+    renderRecords();
+    renderStats();
+    renderGoals();
+    renderQuotes();
+    closeRecordModal();
+  }
+
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+  }
+
+  // ========== 删除功能 ==========
+  function showDeleteModal(id) {
+    deleteRecordId = id;
+    document.getElementById('deleteModal').classList.add('show');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('show');
+    deleteRecordId = null;
+  }
+
+  function confirmDelete() {
+    if (deleteRecordId !== null) {
+      records = records.filter(r => r.id !== deleteRecordId);
+      saveRecords();
+      renderRecords();
+      renderStats();
+      renderGoals();
+      renderQuotes();
+      showToast('已删除', 'success');
+    }
+    closeDeleteModal();
+  }
+
+  // ========== Toast 提示 ==========
+  function showToast(message, type = '') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast';
+    if (type) toast.classList.add(type);
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+
+  // ========== 统计页面 ==========
+  function renderStats() {
+    const books = records.filter(r => r.type === 'book' && r.status === 'done');
+    const music = records.filter(r => r.type === 'music' && r.status === 'done');
+    const movies = records.filter(r => r.type === 'movie' && r.status === 'done');
+    
+    const total = books.length + music.length + movies.length;
+
+    document.getElementById('statTotalBooks').textContent = books.length;
+    document.getElementById('statTotalMusic').textContent = music.length;
+    document.getElementById('statTotalMovies').textContent = movies.length;
+
+    // 平均评分
+    const ratedRecords = records.filter(r => r.rating > 0 && r.status === 'done');
+    const avgRating = ratedRecords.length > 0 
+      ? (ratedRecords.reduce((sum, r) => sum + r.rating, 0) / ratedRecords.length).toFixed(1)
+      : 0;
+    document.getElementById('statAvgRating').textContent = avgRating;
+
+    // 类型分布
+    document.getElementById('distTotal').textContent = total;
+    document.getElementById('legendBookCount').textContent = books.length;
+    document.getElementById('legendMusicCount').textContent = music.length;
+    document.getElementById('legendMovieCount').textContent = movies.length;
+
+    if (total > 0) {
+      document.getElementById('legendBookBar').style.width = `${(books.length / total * 100).toFixed(0)}%`;
+      document.getElementById('legendMusicBar').style.width = `${(music.length / total * 100).toFixed(0)}%`;
+      document.getElementById('legendMovieBar').style.width = `${(movies.length / total * 100).toFixed(0)}%`;
+    }
+
+    // 环形图
+    renderDonutChart(books.length, music.length, movies.length);
+
+    // 评分分布
+    renderRatingDistribution();
+
+    // 热力图
+    renderHeatmap();
+
+    // 月度趋势
+    renderMonthlyChart();
+  }
+
+  function renderDonutChart(books, music, movies) {
+    const chart = document.getElementById('distributionChart');
+    const total = books + music + movies;
+    
+    if (total === 0) {
+      chart.style.background = 'var(--bg-tag)';
+      return;
+    }
+
+    const bookPercent = books / total * 100;
+    const musicPercent = music / total * 100;
+    const moviePercent = movies / total * 100;
+
+    chart.style.background = `conic-gradient(
+      #6B8E23 0deg ${bookPercent * 3.6}deg,
+      #9370DB ${bookPercent * 3.6}deg ${(bookPercent + musicPercent) * 3.6}deg,
+      #CD5C5C ${(bookPercent + musicPercent) * 3.6}deg 360deg
+    )`;
+  }
+
+  function renderRatingDistribution() {
+    const container = document.getElementById('ratingDistribution');
+    const distribution = [0, 0, 0, 0, 0];
+    
+    records.forEach(r => {
+      if (r.rating >= 1 && r.rating <= 5) {
+        distribution[r.rating - 1]++;
+      }
+    });
+
+    const maxCount = Math.max(...distribution, 1);
+
+    container.innerHTML = distribution.map((count, index) => {
+      const rating = index + 1;
+      const percent = (count / maxCount * 100).toFixed(0);
+      return `
+        <div class="rating-row">
+          <span class="rating-label">${rating} 星</span>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+          <span class="rating-count">${count}</span>
+        </div>
+      `;
+    }).reverse().join('');
+  }
+
+  function renderHeatmap() {
+    const container = document.getElementById('heatmap');
+    const today = new Date();
+    const daysInYear = 365;
+    const dayMs = 24 * 60 * 60 * 1000;
+
+    // 按日期统计记录数
+    const recordCounts = {};
+    records.forEach(r => {
+      const date = new Date(r.timestamp);
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      recordCounts[dateStr] = (recordCounts[dateStr] || 0) + 1;
+    });
+
+    // 生成过去一年的热力图
+    let html = '';
+    const startDate = new Date(today.getTime() - daysInYear * dayMs);
+    
+    // 调整到周日开始
+    const startDay = startDate.getDay();
+    startDate.setDate(startDate.getDate() - startDay);
+
+    // 生成周
+    const weeks = Math.ceil((daysInYear + startDay) / 7);
+    
+    for (let w = 0; w < weeks; w++) {
+      html += '<div style="display: flex; flex-direction: column; gap: 4px;">';
+      for (let d = 0; d < 7; d++) {
+        const date = new Date(startDate.getTime() + (w * 7 + d) * dayMs);
+        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const count = recordCounts[dateStr] || 0;
+        
+        let level = 0;
+        if (count >= 1) level = 1;
+        if (count >= 2) level = 2;
+        if (count >= 4) level = 3;
+        if (count >= 7) level = 4;
+
+        const isFuture = date > today;
+        
+        html += `<div 
+          class="heatmap-day ${level > 0 ? 'level-' + level : ''}" 
+          style="opacity: ${isFuture ? '0.3' : '1'}"
+          title="${dateStr}: ${count} 条记录"
+          onmouseover="showHeatmapTooltip(event, '${dateStr}', ${count})"
+          onmouseout="hideHeatmapTooltip()"
+        ></div>`;
+      }
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  function showHeatmapTooltip(event, date, count) {
+    const tooltip = document.getElementById('heatmapTooltip');
+    tooltip.textContent = `${date}: ${count} 条记录`;
+    tooltip.style.display = 'block';
+    tooltip.style.left = event.pageX + 10 + 'px';
+    tooltip.style.top = event.pageY - 30 + 'px';
+  }
+
+  function hideHeatmapTooltip() {
+    document.getElementById('heatmapTooltip').style.display = 'none';
+  }
+
+  function renderMonthlyChart() {
+    const container = document.getElementById('monthlyChart');
+    const today = new Date();
+    const months = [];
+    
+    // 过去 12 个月
+    for (let i = 11; i >= 0; i--) {
+      const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      const monthLabel = `${date.getMonth() + 1}月`;
+      
+      const count = records.filter(r => {
+        const rDate = new Date(r.timestamp);
+        return `${rDate.getFullYear()}-${String(rDate.getMonth() + 1).padStart(2, '0')}` === monthKey;
+      }).length;
+      
+      months.push({ label: monthLabel, count });
+    }
+
+    const maxCount = Math.max(...months.map(m => m.count), 1);
+
+    container.innerHTML = months.map(m => `
+      <div class="monthly-bar">
+        <div class="monthly-bar-fill" style="height: ${(m.count / maxCount * 100).toFixed(0)}%;"></div>
+        <span class="monthly-bar-label">${m.label}</span>
+      </div>
+    `).join('');
+  }
+
+  // ========== 目标页面 ==========
+  function renderGoals() {
+    // 更新输入框默认值
+    document.getElementById('bookGoalInput').value = goals.book;
+    document.getElementById('musicGoalInput').value = goals.music;
+    document.getElementById('movieGoalInput').value = goals.movie;
+
+    // 计算已完成数量（今年的）
+    const thisYear = new Date().getFullYear();
+    const booksThisYear = records.filter(r => r.type === 'book' && r.status === 'done' && new Date(r.timestamp).getFullYear() === thisYear).length;
+    const musicThisYear = records.filter(r => r.type === 'music' && r.status === 'done' && new Date(r.timestamp).getFullYear() === thisYear).length;
+    const moviesThisYear = records.filter(r => r.type === 'movie' && r.status === 'done' && new Date(r.timestamp).getFullYear() === thisYear).length;
+
+    // 更新显示
+    document.getElementById('bookGoalCurrent').textContent = booksThisYear;
+    document.getElementById('bookGoalTarget').textContent = goals.book;
+    document.getElementById('bookGoalProgress').style.width = `${Math.min(booksThisYear / goals.book * 100, 100)}%`;
+
+    document.getElementById('musicGoalCurrent').textContent = musicThisYear;
+    document.getElementById('musicGoalTarget').textContent = goals.music;
+    document.getElementById('musicGoalProgress').style.width = `${Math.min(musicThisYear / goals.music * 100, 100)}%`;
+
+    document.getElementById('movieGoalCurrent').textContent = moviesThisYear;
+    document.getElementById('movieGoalTarget').textContent = goals.movie;
+    document.getElementById('movieGoalProgress').style.width = `${Math.min(moviesThisYear / goals.movie * 100, 100)}%`;
+
+    // 进行中的记录
+    renderInProgress();
+  }
+
+  function saveGoal(type) {
+    const input = document.getElementById(`${type}GoalInput`);
+    const value = parseInt(input.value);
+    
+    if (value > 0) {
+      goals[type] = value;
+      saveGoals();
+      renderGoals();
+      showToast('目标已更新 ✓', 'success');
+    } else {
+      showToast('请输入有效的目标值', 'error');
+    }
+  }
+
+  function renderInProgress() {
+    const container = document.getElementById('inProgressList');
+    const inProgress = records.filter(r => r.status === 'in-progress');
+
+    if (inProgress.length === 0) {
+      container.innerHTML = '<p style="color: var(--text-tertiary); text-align: center; padding: 20px;">暂无进行中的记录</p>';
+      return;
+    }
+
+    container.innerHTML = inProgress.map(record => `
+      <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-primary); border-radius: 12px; margin-bottom: 12px;">
+        <div style="font-size: 32px;">${typeIcons[record.type]}</div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">${record.name}</div>
+          <div style="height: 6px; background: var(--bg-tag); border-radius: 3px; margin-bottom: 4px;">
+            <div style="height: 100%; width: ${record.progress || 0}%; background: var(--accent-gradient); border-radius: 3px;"></div>
+          </div>
+          <div style="font-size: 12px; color: var(--text-tertiary);">进度 ${record.progress || 0}%</div>
+        </div>
+        <button class="action-btn" onclick="editRecord(${record.id})">✏️</button>
+      </div>
+    `).join('');
+  }
+
+  // ========== 金句页面 ==========
+  function renderQuotes() {
+    const container = document.getElementById('quotesList');
+    const emptyState = document.getElementById('quotesEmptyState');
+    
+    const allQuotes = [];
+    records.forEach(record => {
+      if (record.quotes && record.quotes.length > 0) {
+        record.quotes.forEach(quote => {
+          allQuotes.push({
+            text: quote,
+            source: record.name,
+            type: record.type
+          });
+        });
+      }
+    });
+
+    if (allQuotes.length === 0) {
+      container.style.display = 'none';
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    container.style.display = 'grid';
+    emptyState.style.display = 'none';
+
+    container.innerHTML = allQuotes.map(quote => `
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">${quote.text}</p>
+        <div class="quote-source">
+          —— <span class="source-name">${typeIcons[quote.type]} ${quote.source}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ========== 点击遮罩关闭弹窗 ==========
+  document.getElementById('recordModal').addEventListener('click', function(e) {
+    if (e.target === this) closeRecordModal();
+  });
+
+  document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+  });
+
+  // ESC 关闭弹窗
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (document.getElementById('deleteModal').classList.contains('show')) {
+        closeDeleteModal();
+      } else if (document.getElementById('recordModal').classList.contains('show')) {
+        closeRecordModal();
+      }
+    }
+  });
+
+  // 初始化
+  init();
+</script>
+</body>
+</html>
